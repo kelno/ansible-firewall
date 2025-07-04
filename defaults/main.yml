@@ -1,0 +1,5 @@
+---
+# List of firewall rules to apply
+_firewall_rules: []
+firewall_reset_before: true
+firewall_whitelisted_networks: ["192.168.0.0/16"]

@@ -1,0 +1,47 @@
+---
+# Argument specs does not generate the default fields, they're here for documentation purposes.
+# add_firewall_rule.yml will provide the actual defaults values and thos values must be kept in sync with this file.
+argument_specs:
+  main:
+    short_description: Firewall configuration using UFW
+    description: |
+      Manages UFW firewall rules and configurations.
+      Allows other roles to register their required ports through firewall_rules variable.
+    options:
+      firewall_reset_before:
+        type: bool
+        required: false
+        description: Clear all previous firewall rules before applying new ones
+      firewall_whitelisted_networks:
+        type: list
+        elements: str
+        required: false
+        description: List of networks in CIDR notation allowed to bypass the incoming firewall rules
+        default: ["192.168.0.0/16"]
+      firewall_rules:
+        type: list
+        elements: dict
+        required: false
+        description: List of firewall rules added by other roles
+        options:
+          port:
+            type: int
+            required: true
+            description: Port number to configure
+          protocol:
+            type: str
+            required: false
+            choices: ["tcp", "udp"]
+            description: Protocol (tcp or udp)
+            default: "tcp"
+          rule:
+            type: str
+            required: false
+            choices: ["allow", "deny", "reject", "limit"]
+            description: UFW rule action
+            default: "allow"
+          from_ip:
+            type: str
+            required: false
+            description: Source network in CIDR notation (e.g. 192.168.0.0/16)
+            default: None

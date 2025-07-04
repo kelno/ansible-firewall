@@ -1,0 +1,16 @@
+---
+- name: Ensure UFW is installed
+  ansible.builtin.apt:
+    name: ufw
+
+- name: Configure Firewall
+  ansible.builtin.include_tasks: configure.yml
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+
+- name: Show ufw status
+  ansible.builtin.command: ufw status verbose
+  register: ufw_status
+  changed_when: false
