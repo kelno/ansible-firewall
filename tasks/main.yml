@@ -1,16 +1,26 @@
 ---
-- name: Ensure UFW is installed
+- name: Ensure nftables is installed
   ansible.builtin.apt:
-    name: ufw
+    name: nftables
+  become: true
 
 - name: Configure Firewall
   ansible.builtin.include_tasks: configure.yml
 
-- name: Enable UFW
-  community.general.ufw:
-    state: enabled
+- name: Enable nftables
+  ansible.builtin.systemd:
+    name: nftables
+    state: started
+    enabled: true
+  become: true
 
-- name: Show ufw status
-  ansible.builtin.command: ufw status verbose
-  register: ufw_status
+- name: Record nftables status
+  ansible.builtin.command: nft list ruleset
+  become: true
+  register: nftables_status
+  changed_when: false
+
+- name: Print nftables status
+  ansible.builtin.debug:
+    msg: "nftables status: {{ nftables_status.stdout }}"
   changed_when: false
