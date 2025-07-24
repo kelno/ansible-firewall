@@ -3,4 +3,5 @@
 # firewall_reset_before: true
 # firewall_whitelisted_networks: ["192.168.0.0/16"]
 
-firewall_nftables_extra_config_dir: "/etc/nftables.d/"
+# without ending slash
+firewall_nftables_extra_config_dir: "/etc/nftables.d"

@@ -1,59 +1,19 @@
 # Usage
 
-Make other roles depend on this one with:  
-```
+Make your role depend on this one.
+
+`meta/main.yml`
+```yml
 dependencies:
   - role: firewall
-    vars:
-      _firewall_register_rules:
-        - port: 8096 # Only port is mandatory, the rest will use default values allow TCP (from everywhere)
-        - protocol: udp
-          port: 1900
-          rule: allow
-        - protocol: tcp
-          port: 1901
-          rule: allow
-          from_ip: 192.168.1.0/24
 ```
 
-Then you need to apply those rules, for example from main playbook:  
-```
-- name: Install & apply accumulated firewall rules
-  hosts: all
-  roles:
-    - role: firewall
-      tasks_from: apply
+Add your custom rules as a file to include in nftable.d, in the relevant chain.
+Currently supported chains are listed in vars/main.yml, providing dir variables you should use to place your file.
 
-```
+Example would be to create a file `{{ firewall_nftables_extra_config_inet_input_dir}}/web_main.nft`
 
-
-Old doc:  
-```
-_firewall_register_rules:
-        type: list
-        elements: dict
-        required: false
-        description: List of firewall rules added by other roles
-        options:
-          port:
-            type: int
-            required: true
-            description: Port number to configure
-          protocol:
-            type: str
-            required: false
-            choices: ["tcp", "udp"]
-            description: Protocol (tcp or udp)
-            default: "tcp"
-          rule:
-            type: str
-            required: false
-            choices: ["allow", "deny", "reject", "limit"]
-            description: UFW rule action
-            default: "allow"
-          from_ip:
-            type: str
-            required: false
-            description: Source network in CIDR notation (e.g. 192.168.0.0/16)
-            default: None
+with content:
+```yaml
+tcp dport {{ web_main_public_port }} ip accept
 ```

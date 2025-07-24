@@ -1,0 +1,10 @@
+firewall_nftables_extra_config_inet_input_dir: "{{ firewall_nftables_extra_config_dir }}/inet/input"
+firewall_nftables_extra_config_inet_forward_dir: "{{ firewall_nftables_extra_config_dir }}/inet/forward"
+firewall_nftables_extra_config_inet_output_dir: "{{ firewall_nftables_extra_config_dir }}/inet/output"
+firewall_nftables_extra_config_ip_nat_postrouting_dir: "{{ firewall_nftables_extra_config_dir }}/ip/nat/postrouting"
+
+_firewall_nftables_all_extra_dirs:
+  - "{{ firewall_nftables_extra_config_inet_input_dir }}"
+  - "{{ firewall_nftables_extra_config_inet_forward_dir }}"
+  - "{{ firewall_nftables_extra_config_inet_output_dir }}"
+  - "{{ firewall_nftables_extra_config_ip_nat_postrouting_dir }}"

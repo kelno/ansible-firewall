@@ -1,8 +1,26 @@
 ---
 - name: Ensure nftables override directory exists
   ansible.builtin.file:
-    path: "{{ firewall_nftables_extra_config_dir }}"
+    path: "{{ firewall_nftables_extra_config_inet_input_dir }}"
     state: directory
     owner: "root"
     group: "root"
     mode: "0755"
+
+- name: Ensure all nftables include directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ _firewall_nftables_all_extra_dirs }}"
+
+- name: Install main nftables config from template
+  ansible.builtin.template:
+    src: nftables.conf.j2
+    dest: /etc/nftables.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload nftables
